@@ -14,6 +14,24 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class PlaceController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/v1/places",
+     *     summary="Listar locais",
+     *     tags={"Locais"},
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Quantidade de registros por página",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista paginada de locais"
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         try {
@@ -26,6 +44,26 @@ class PlaceController extends Controller
         }
     }
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/places",
+     *     summary="Criar um novo local",
+     *     tags={"Locais"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "city", "state"},
+     *             @OA\Property(property="name", type="string", example="Praça Central"),
+     *             @OA\Property(property="city", type="string", example="São Paulo"),
+     *             @OA\Property(property="state", type="string", example="SP")
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Local criado com sucesso"),
+     *     @OA\Response(response=409, description="Local duplicado"),
+     *     @OA\Response(response=500, description="Erro interno")
+     * )
+     */
     public function store(PlaceRequest $request)
     {
         try {
@@ -51,6 +89,23 @@ class PlaceController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/places/{id}",
+     *     summary="Buscar um local pelo ID",
+     *     tags={"Locais"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do local",
+     *         @OA\Schema(type="string", format="uuid")
+     *     ),
+     *     @OA\Response(response=200, description="Detalhes do local"),
+     *     @OA\Response(response=404, description="Local não encontrado"),
+     *     @OA\Response(response=400, description="ID inválido")
+     * )
+     */
     public function show(string $id)
     {
         try {
@@ -68,6 +123,32 @@ class PlaceController extends Controller
         }
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/v1/places/{id}",
+     *     summary="Atualizar um local existente",
+     *     tags={"Locais"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do local",
+     *         @OA\Schema(type="string", format="uuid")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "city", "state"},
+     *             @OA\Property(property="name", type="string", example="Praça Renovada"),
+     *             @OA\Property(property="city", type="string", example="Rio de Janeiro"),
+     *             @OA\Property(property="state", type="string", example="RJ")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Local atualizado"),
+     *     @OA\Response(response=404, description="Local ou cidade/estado não encontrados"),
+     *     @OA\Response(response=500, description="Erro interno")
+     * )
+     */
     public function update(PlaceRequest $request, Place $place)
     {
         try {
@@ -96,6 +177,22 @@ class PlaceController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/v1/places/{id}",
+     *     summary="Excluir um local",
+     *     tags={"Locais"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID do local",
+     *         @OA\Schema(type="string", format="uuid")
+     *     ),
+     *     @OA\Response(response=204, description="Local removido"),
+     *     @OA\Response(response=500, description="Erro interno")
+     * )
+     */
     public function destroy(Place $place)
     {
         try {
