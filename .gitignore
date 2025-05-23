@@ -2,3 +2,5 @@
 /vendor
 /tests
 /storage
+.env
+/.idea
