@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PlaceRequest;
-use App\Http\Resources\PlaceResource;
+use App\Http\Requests\{PlaceSearchRequest, PlaceRequest};
+use App\Http\Resources\{PlaceResource};
 use App\Models\{City, State, Place};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -107,6 +107,19 @@ class PlaceController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse('Erro ao remover o local.', $e);
         }
+    }
+
+    public function search(PlaceSearchRequest $request)
+    {
+        $name = $request->input('name');
+
+        $perPage = $request->query('per_page', 15);
+
+        $places = Place::with(['city', 'state'])
+            ->where('name', 'ILIKE', "%{$name}%")
+            ->paginate($perPage);
+
+        return PlaceResource::collection($places);
     }
 
     private function getCityByName(string $name): City
