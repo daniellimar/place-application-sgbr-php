@@ -60,7 +60,13 @@ docker compose build
 docker compose up -d
 ```
 
-### 7. Instale as dependências e configure o Laravel (opcional)
+### 7. Aguarde a alimentação das tabelas de Estados e Cidades
+
+```bash
+docker logs -f place-application-sgbr-php-app-1
+```
+
+### 8. Instale as dependências e configure o Laravel (opcional)
 
 ```bash
 docker compose exec app bash
@@ -73,5 +79,13 @@ php artisan key:generate
 A API estará disponível em:
 
 ```bash
-http://localhost:8000
+http://localhost:8080/api/v1/places
+```
+
+### 🌐 Acesso à Documentação
+
+A Documentação estará disponível em:
+
+```bash
+http://127.0.0.1:8080/api/documentation
 ```
