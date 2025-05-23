@@ -13,7 +13,7 @@ locais (places).
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/api-places.git
+git clone [https://github.com/seu-usuario/api-places.git](https://github.com/daniellimar/place-application-sgbr-php.git)
 cd api-places
 ```
 
