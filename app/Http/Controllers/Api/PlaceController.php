@@ -31,8 +31,8 @@ class PlaceController extends Controller
         try {
             return DB::transaction(function () use ($request) {
                 $validated = $request->validated();
-                $city = $this->getCityByName($validated['city']);
                 $state = $this->getStateBySigla($validated['state']);
+                $city = $this->getCityByName($validated['city'], $state);
 
                 $place = Place::create([
                     'name' => $validated['name'],
@@ -42,8 +42,7 @@ class PlaceController extends Controller
 
                 return new PlaceResource($place);
             });
-        } catch (ModelNotFoundException) {
-            return $this->notFoundResponse('Cidade ou estado não encontrados.');
+
         } catch (QueryException $e) {
             if ($e->getCode() === '23505') {
                 return $this->conflictResponse('Já existe um local com este nome para esta cidade e estado.');
@@ -74,8 +73,8 @@ class PlaceController extends Controller
         try {
             return DB::transaction(function () use ($request, $place) {
                 $validated = $request->validated();
-                $city = $this->getCityByName($validated['city']);
                 $state = $this->getStateBySigla($validated['state']);
+                $city = $this->getCityByName($validated['city'], $state);
 
                 $place->update([
                     'name' => $validated['name'],
@@ -122,14 +121,16 @@ class PlaceController extends Controller
         return PlaceResource::collection($places);
     }
 
-    private function getCityByName(string $name): City
+    private function getCityByName(string $name, State $state): City
     {
-        return City::where('nome', $name)->firstOrFail();
+        $cityInput = mb_strtolower(trim($name));
+        return City::whereRaw('LOWER(nome) = ?', [$cityInput])->where('state_id', $state->id)->firstOrFail();
     }
 
     private function getStateBySigla(string $sigla): State
     {
-        return State::where('sigla', $sigla)->firstOrFail();
+        $stateInput = mb_strtoupper(trim($sigla));
+        return State::where('sigla', $stateInput)->firstOrFail();
     }
 
     private function errorResponse(string $message, \Throwable $e)
