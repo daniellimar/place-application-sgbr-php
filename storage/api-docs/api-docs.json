@@ -1,0 +1,212 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Place Application API",
+        "description": "Documentação da API para o sistema de locais",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Servidor principal"
+        }
+    ],
+    "paths": {
+        "/api/v1/places": {
+            "get": {
+                "tags": [
+                    "Locais"
+                ],
+                "summary": "Listar locais",
+                "operationId": "23fed5474eabbe7561b3b1668421315c",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Quantidade de registros por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista paginada de locais"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Locais"
+                ],
+                "summary": "Criar um novo local",
+                "operationId": "4fe87662effdfc3cb8087f212f193392",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "city",
+                                    "state"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Praça Central"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "São Paulo"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "SP"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Local criado com sucesso"
+                    },
+                    "409": {
+                        "description": "Local duplicado"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            }
+        },
+        "/api/v1/places/{id}": {
+            "get": {
+                "tags": [
+                    "Locais"
+                ],
+                "summary": "Buscar um local pelo ID",
+                "operationId": "a164f62a40d45bfed59414a2df2303ed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do local",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do local"
+                    },
+                    "404": {
+                        "description": "Local não encontrado"
+                    },
+                    "400": {
+                        "description": "ID inválido"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Locais"
+                ],
+                "summary": "Atualizar um local existente",
+                "operationId": "d993e13f1e9d561dbd68f40ef56ae373",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do local",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "city",
+                                    "state"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Praça Renovada"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Rio de Janeiro"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "RJ"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Local atualizado"
+                    },
+                    "404": {
+                        "description": "Local ou cidade/estado não encontrados"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Locais"
+                ],
+                "summary": "Excluir um local",
+                "operationId": "8b82c15f137fe38c0587d8b86c0d9f95",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do local",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Local removido"
+                    },
+                    "500": {
+                        "description": "Erro interno"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Locais",
+            "description": "Locais"
+        }
+    ]
+}
