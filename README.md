@@ -44,7 +44,7 @@ variáveis de ambiente:
 ```bash
 environment:
   POSTGRES_DB: api-places
-  POSTGRES_USER: postgres
+  POSTGRES_USER: root
   POSTGRES_PASSWORD: mysecretpassword
 ```
 
